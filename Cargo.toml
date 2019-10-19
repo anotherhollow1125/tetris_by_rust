@@ -1,0 +1,12 @@
+[package]
+name = "tetris"
+version = "0.1.0"
+authors = ["anotherhollow1125 <anotherhollow1125@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.7.2"
+find_folder = "0.3.0"
+piston_window = "0.105.0"
