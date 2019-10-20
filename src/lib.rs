@@ -6,7 +6,7 @@ pub mod game {
 
     const NEXTS : u32 = 3;
     const SAFTY_FRAMES : u32 = 90;
-    const INTERVAL : u32 = 45;
+    const INTERVAL : u32 = 20;
     const LEVEL_UP_LINE_NUM : u32 = 10;
     const MAX_GRAVITY_RECIP : u32 = 5;
     const SPEEDUP_RATE : f32 = 0.9;
@@ -28,12 +28,12 @@ pub mod game {
         shape: [[bool; 4]; 4],
         size : usize,
         color: [f32; 4],
-        kind : MinoKind,
+        // kind : MinoKind,
     }
 
-    enum MinoKind {
-        D, I, O, S, Z, J, L, T,
-    }
+    // enum MinoKind {
+    //     D, I, O, S, Z, J, L, T,
+    // }
 
     static D: Mino = Mino {
         shape: [
@@ -44,7 +44,7 @@ pub mod game {
         ],
         size : 4,
         color: TRANS,
-        kind : MinoKind::D,
+        // kind : MinoKind::D,
     };
 
     static I: Mino = Mino {
@@ -56,7 +56,7 @@ pub mod game {
         ],
         size : 4,
         color: CYAN, // cyan
-        kind : MinoKind::I,
+        // kind : MinoKind::I,
     };
     static O: Mino = Mino {
         shape: [
@@ -67,7 +67,7 @@ pub mod game {
         ],
         size : 2,
         color: YELLOW, // yellow
-        kind : MinoKind::O,
+        // kind : MinoKind::O,
     };
     static S: Mino = Mino {
         shape: [
@@ -78,7 +78,7 @@ pub mod game {
         ],
         size : 3,
         color: LIME, // lime
-        kind : MinoKind::S,
+        // kind : MinoKind::S,
     };
     static Z: Mino = Mino {
         shape: [
@@ -89,7 +89,7 @@ pub mod game {
         ],
         size : 3,
         color: RED, // red
-        kind : MinoKind::Z,
+        // kind : MinoKind::Z,
     };
     static J: Mino = Mino {
         shape: [
@@ -100,7 +100,7 @@ pub mod game {
         ],
         size : 3,
         color: BLUE, // blue
-        kind : MinoKind::J,
+        // kind : MinoKind::J,
     };
     static L: Mino = Mino {
         shape: [
@@ -111,7 +111,7 @@ pub mod game {
         ],
         size : 3,
         color: ORANGE, // orange
-        kind : MinoKind::L,
+        // kind : MinoKind::L,
     };
     static T: Mino = Mino {
         shape: [
@@ -122,14 +122,14 @@ pub mod game {
         ],
         size : 3,
         color: PURPLE, // purple
-        kind : MinoKind::T,
+        // kind : MinoKind::T,
     };
 
     #[derive(Debug, Copy, Clone)]
     pub struct Block {
-        pub filled   : bool,
-        pub color    : [f32; 4],
-        pub clearing : bool,
+        filled   : bool,
+        color    : [f32; 4],
+        clearing : bool,
     }
 
     impl Block {
@@ -140,8 +140,12 @@ pub mod game {
             }
         }
 
-        pub fn set_color(&mut self, color: [f32; 4]) {
-            self.color = color;
+        pub fn is_filled(&self) -> bool {
+            self.filled
+        }
+
+        pub fn get_color(&self) -> [f32; 4] {
+            self.color
         }
 
         pub fn is_clearing(&self) -> bool {
@@ -172,7 +176,8 @@ pub mod game {
         // SRS
         // url: https://tetrisch.github.io/main/srs.html
         fn next_sequences(&self, mino: &'static Mino) -> Vec<(i32, i32)> {
-            match mino.kind {
+            // match mino.kind {
+            match mino.size {
                 /* MinoKind::T => match self {
                     Dir::East  => vec![( 0, -1), (-1, -1),
                                        ( 2,  0), ( 2, -1)],
@@ -183,7 +188,8 @@ pub mod game {
                     Dir::North => vec![( 0, -1), ( 1, -1), // サイトはここだけ変だった...?
                                        (-2,  0), (-2, -1)],
                 }, */
-                MinoKind::I => match self {
+                // MinoKind::I => match self {
+                4 => match self {
                     Dir::East  => vec![( 0, -2), ( 0,  1),
                                        ( 1, -2), (-2,  1)],
                     Dir::South => vec![( 0, -1), ( 0,  2),
@@ -211,7 +217,8 @@ pub mod game {
         }
 
         fn pre_sequences(&self, mino: &'static Mino) -> Vec<(i32, i32)> {
-            match mino.kind {
+            // match mino.kind {
+            match mino.size {
                 /* MinoKind::T => match self {
                     Dir::West  => vec![( 0,  1), (-1,  1),
                                        ( 2,  0), ( 2,  1)],
@@ -222,7 +229,8 @@ pub mod game {
                     Dir::South => vec![( 0, -1), ( 1, -1),
                                        (-2,  0), (-2, -1)],
                 }, */
-                MinoKind::I => match self {
+                // MinoKind::I => match self {
+                4 => match self {
                     Dir::West  => vec![( 0, -1), ( 0,  2),
                                        (-2, -1), ( 1,  2)],
                     Dir::North => vec![( 0,  2), ( 0, -1),
@@ -371,6 +379,7 @@ pub mod game {
         reciprocal : u32,
         drop_limit : u32,
         fix_flag   : bool,
+        // frames     : u32,
     }
 
     impl Gravity {
@@ -382,6 +391,7 @@ pub mod game {
                 reciprocal,
                 drop_limit,
                 fix_flag: false,
+                // frames : 0,
             }
         }
     }
@@ -402,11 +412,11 @@ pub mod game {
         minogen        : MinoGenerator,
 
         // States
-        pub score      : u32,
-        pub clearlines : u32,
+        score          : u32,
+        clearlines     : u32,
         cleartargets   : [bool; 21],
         dropping       : DroppingState,
-        pub game_over  : bool,
+        game_over      : bool,
         gravity        : Gravity,
     }
 
@@ -449,6 +459,22 @@ pub mod game {
                 game_over: false,
                 gravity : Gravity::new(),
             }
+        }
+
+        pub fn get_score(&self) -> u32 {
+            self.score
+        }
+
+        pub fn get_clearlines(&self) -> u32 {
+            self.clearlines
+        }
+
+        pub fn is_gameover(&self) -> bool {
+            self.game_over
+        }
+
+        pub fn can_use_hold(&self) -> bool {
+            !self.holdflag
         }
 
         pub fn rend_field(&mut self) -> [[Block; 10]; 20] {
@@ -521,6 +547,7 @@ pub mod game {
             // memo: self.nextminos.pop_back().unwrap()
             // self.nextminos.push_front(self.minogen.generate());
             self.current_frames = 0;
+            // self.gravity.frames = 0;
             self.contmino.pos_verify(&self.field)
         }
 
@@ -559,7 +586,7 @@ pub mod game {
                 }
             }
             self.cleartargets = [false; 21];
-            self.dropping = DroppingState::Dropping;
+            // self.dropping = DroppingState::Dropping;
         }
 
         fn fix_mino(&mut self) {
@@ -589,8 +616,9 @@ pub mod game {
         }
 
         fn mino_down_with_score(&mut self) -> bool {
-            self.score += 1;
-            self.contmino.move_mino(&self.field, 1, 0)
+            let res = self.contmino.move_mino(&self.field, 1, 0);
+            if res { self.score += 1 }
+            res
         }
 
         pub fn clock(&mut self, keys: [bool; 7]) {
@@ -607,19 +635,6 @@ pub mod game {
                 };
                 return;
             }
-
-            // free fall
-            if !keys[3] && self.current_frames > 0
-                && self.current_frames % self.gravity.reciprocal == 0
-                && !self.contmino.move_mino(&self.field, 1, 0) {
-                    if self.current_frames > SAFTY_FRAMES
-                        && (self.gravity.fix_flag
-                            || self.current_frames > self.gravity.drop_limit) {
-                            self.fix_mino();
-                        }
-                    self.gravity.fix_flag = true;
-                }
-
 
         // pub fn key_input(&mut self, keys: [bool; 7]) {
             /*
@@ -649,11 +664,7 @@ pub mod game {
 
             // move
             if keys[3] {
-                if self.gravity.fix_flag {
-                    self.fix_mino();
-                } else {
-                    self.gravity.fix_flag = !self.mino_down_with_score();
-                }
+                self.mino_down_with_score();
             } else if keys[4] {
                 let _ = self.contmino.move_mino(&self.field, 0, 1);
             } else if keys[5] {
@@ -673,8 +684,28 @@ pub mod game {
                 self.holdflag = true;
             }
 
+            // free fall
+            if self.current_frames % self.gravity.reciprocal == 0 {
+
+                let moved = self.contmino.move_mino(&self.field, 1, 0);
+
+                let fix_cond = self.current_frames > SAFTY_FRAMES
+                    && (self.gravity.fix_flag
+                        || self.current_frames > self.gravity.drop_limit);
+
+                if fix_cond && !moved {
+                    self.fix_mino();
+                // moved == true
+                } else if self.contmino.move_mino(&self.field, 1, 0) {
+                    self.contmino.move_mino(&self.field, -1, 0);
+                } else {
+                    self.gravity.fix_flag = true;
+                }
+            }
+
             self.total_frames += 1;
             self.current_frames += 1;
+            // self.gravity.frames += 1;
         }
     }
 }

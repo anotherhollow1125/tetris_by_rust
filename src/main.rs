@@ -17,17 +17,18 @@ fn main() {
 
     let assets = find_folder::Search::ParentsThenKids(3, 3)
         .for_folder("assets").unwrap();
-    println!("{:?}", assets);
     let mut glyphs = window.load_font(assets.join("FiraSans-Regular.ttf")).unwrap();
 
     let mut game = Game::new();
     let mut button = [false; 7];
+    let mut frames = 0;
 
     // window.set_lazy(true);
     while let Some(e) = window.next() {
         if let Some(_) = e.render_args() {
             const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
             const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
+            const GRAY : [f32; 4] = [0.3, 0.3, 0.3, 1.0];
 
             window.draw_2d(&e, |c, g, device| {
                 // Clear the screen.
@@ -44,7 +45,12 @@ fn main() {
                         let square = rectangle::square(0.0, 0.0, 15.0);
                         let (x, y) = (130 + (i as u32)*15, 100 + (j as u32)*15);
                         let transform = c.transform.trans(y as f64, x as f64);
-                        rectangle(block.color, square, transform, g);
+                        let color = if !block.is_filled() || game.can_use_hold() {
+                            block.get_color()
+                        } else {
+                            GRAY
+                        };
+                        rectangle(color, square, transform, g);
                     }
                 }
 
@@ -54,8 +60,8 @@ fn main() {
                         let square = rectangle::square(0.0, 0.0, 15.0);
                         let (x, y) = (100 + (i as u32)*15, 175 + (j as u32)*15);
                         let transform = c.transform.trans(y as f64, x as f64);
-                        let mut color = block.color;
-                        if block.clearing { color[3] = 1.0 - game.get_interval_ratio(); }
+                        let mut color = block.get_color();
+                        if block.is_clearing() { color[3] = 1.0 - game.get_interval_ratio(); }
                         rectangle(color, square, transform, g);
                     }
                 }
@@ -69,7 +75,7 @@ fn main() {
                             let k = k as u32;
                             let (x, y) = ((120+k*42) + (i as u32)*size, 345 + (j as u32)*size);
                             let transform = c.transform.trans(y as f64, x as f64);
-                            rectangle(block.color, square, transform, g);
+                            rectangle(block.get_color(), square, transform, g);
                         }
                     }
                 }
@@ -93,14 +99,14 @@ fn main() {
 
                 let transform = c.transform.trans(350.0, 270.0);
                 text::Text::new_color(BLACK, 24).draw(
-                    &format!("Score: {}", game.score),
+                    &format!("Score: {}", game.get_score()),
                     &mut glyphs,
                     &c.draw_state,
                     transform, g
                 ).unwrap();
                 let transform = c.transform.trans(350.0, 294.0);
                 text::Text::new_color(BLACK, 24).draw(
-                    &format!("Lines: {}", game.clearlines),
+                    &format!("Lines: {}", game.get_clearlines()),
                     &mut glyphs,
                     &c.draw_state,
                     transform, g
@@ -109,14 +115,6 @@ fn main() {
                 glyphs.factory.encoder.flush(device);
             });
         }
-
-        // if let Some(_u) = e.update_args() {
-        //     if !game.game_over {
-        //         game.clock(button);
-        //     }
-
-        //     button = [false; 7];
-        // }
 
         if let Some(btn) = e.press_args() {
             match btn {
@@ -132,8 +130,13 @@ fn main() {
             }
         }
 
-        e.update(|_| {
-            if !game.game_over {
+        e.update(|u| {
+            frames += 1;
+            if frames % std::cmp::max((1.0 / (u.dt*60.0)) as u32, 1) != 0 {
+                return;
+            }
+
+            if !game.is_gameover() {
                 game.clock(button);
             }
 
