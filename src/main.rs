@@ -1,10 +1,10 @@
 extern crate piston_window;
 extern crate find_folder;
 
-extern crate tetris;
+extern crate tetris_lib;
 
 use piston_window::*;
-use tetris::game::*;
+use tetris_lib::game::*;
 
 fn main() {
     let mut window: PistonWindow = WindowSettings::new(
