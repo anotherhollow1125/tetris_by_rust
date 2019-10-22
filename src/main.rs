@@ -46,7 +46,7 @@ fn main() {
                         let (x, y) = (130 + (i as u32)*15, 100 + (j as u32)*15);
                         let transform = c.transform.trans(y as f64, x as f64);
                         let color = if !block.is_filled() || game.can_use_hold() {
-                            block.get_color()
+                            block.get_color().to_rgb()
                         } else {
                             GRAY
                         };
@@ -60,7 +60,7 @@ fn main() {
                         let square = rectangle::square(0.0, 0.0, 15.0);
                         let (x, y) = (100 + (i as u32)*15, 175 + (j as u32)*15);
                         let transform = c.transform.trans(y as f64, x as f64);
-                        let mut color = block.get_color();
+                        let mut color = block.get_color().to_rgb();
                         if block.is_clearing() { color[3] = 1.0 - game.get_interval_ratio(); }
                         rectangle(color, square, transform, g);
                     }
@@ -75,7 +75,7 @@ fn main() {
                             let k = k as u32;
                             let (x, y) = ((120+k*42) + (i as u32)*size, 345 + (j as u32)*size);
                             let transform = c.transform.trans(y as f64, x as f64);
-                            rectangle(block.get_color(), square, transform, g);
+                            rectangle(block.get_color().to_rgb(), square, transform, g);
                         }
                     }
                 }
