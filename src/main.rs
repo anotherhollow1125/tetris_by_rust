@@ -137,7 +137,7 @@ fn main() {
             }
 
             if !game.is_gameover() {
-                game.clock(button);
+                game.tick(button);
             }
 
             button = [false; 7];
