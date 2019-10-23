@@ -1111,7 +1111,7 @@ dependencies = [
 [[package]]
 name = "tetris_lib"
 version = "0.1.0"
-source = "git+https://github.com/anotherhollow1125/tetris_by_rust_lib#9d6ecedea6b2172e26b348033e1e147b12367ef3"
+source = "git+https://github.com/anotherhollow1125/tetris_by_rust_lib#306ead0741404f5b66281d0ed44589a114d9c474"
 dependencies = [
  "rand 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
