@@ -1,10 +1,12 @@
 extern crate piston_window;
 extern crate find_folder;
+extern crate rand;
 
 extern crate tetris_lib;
 
 use piston_window::*;
 use tetris_lib::game::*;
+use rand::{thread_rng, Rng};
 
 fn main() {
     let mut window: PistonWindow = WindowSettings::new(
@@ -19,7 +21,10 @@ fn main() {
         .for_folder("assets").unwrap();
     let mut glyphs = window.load_font(assets.join("FiraSans-Regular.ttf")).unwrap();
 
-    let mut game = Game::new();
+    let mut rng = thread_rng();
+    let rand_gen = Box::new(move || rng.gen::<u32>());
+
+    let mut game = Game::new(rand_gen);
     let mut button = [false; 7];
     let mut frames = 0;
 

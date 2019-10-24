@@ -1105,13 +1105,14 @@ version = "0.1.0"
 dependencies = [
  "find_folder 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston_window 0.105.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "tetris_lib 0.1.0 (git+https://github.com/anotherhollow1125/tetris_by_rust_lib)",
+ "rand 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tetris_lib 0.1.1 (git+https://github.com/anotherhollow1125/tetris_by_rust_lib)",
 ]
 
 [[package]]
 name = "tetris_lib"
-version = "0.1.0"
-source = "git+https://github.com/anotherhollow1125/tetris_by_rust_lib#306ead0741404f5b66281d0ed44589a114d9c474"
+version = "0.1.1"
+source = "git+https://github.com/anotherhollow1125/tetris_by_rust_lib#8cf58c602e5c7937ce8667145a675e156d6e26f2"
 dependencies = [
  "rand 0.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
@@ -1424,7 +1425,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum stb_truetype 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)" = "824210d6fb52cbc3ad2545270ead6860c7311aa5450642b078da4515937b6f7a"
 "checksum syn 0.15.44 (registry+https://github.com/rust-lang/crates.io-index)" = "9ca4b3b69a77cbe1ffc9e198781b7acb0c7365a883670e8f1c1bc66fba79a5c5"
 "checksum syn 1.0.5 (registry+https://github.com/rust-lang/crates.io-index)" = "66850e97125af79138385e9b88339cbcd037e3f28ceab8c5ad98e64f0f1f80bf"
-"checksum tetris_lib 0.1.0 (git+https://github.com/anotherhollow1125/tetris_by_rust_lib)" = "<none>"
+"checksum tetris_lib 0.1.1 (git+https://github.com/anotherhollow1125/tetris_by_rust_lib)" = "<none>"
 "checksum tiff 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d7b7c2cfc4742bd8a32f2e614339dd8ce30dbcf676bb262bd63a2327bc5df57d"
 "checksum unicode-xid 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
 "checksum unicode-xid 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "826e7639553986605ec5979c7dd957c7895e93eabed50ab2ffa7f6128a75097c"
