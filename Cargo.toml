@@ -11,5 +11,5 @@ repository = "https://github.com/anotherhollow1125/tetris_by_rust"
 [dependencies]
 tetris_lib = { git = "https://github.com/anotherhollow1125/tetris_by_rust_lib" }
 find_folder = "0.3.0"
-piston_window = "0.105.0"
-rand = "0.7.2"
+piston_window = "0.123.0"
+rand = "0.8.5"
